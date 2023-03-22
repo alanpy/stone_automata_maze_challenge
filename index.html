@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <title>Desafio</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+   <!-- page content -->
+   <div class="container">
+      <button onclick="step();">Step</button>
+      <button onclick="play();">Play</button>
+      <button onclick="pause();">Pause</button>
+      <button onclick="reset();">Reset</button>
+      <button onclick="test_path();">Test path</button>
+
+      <br>
+
+      <div id="board"></div>
+
+      <div id="status">
+         <p id="status-text">Game Over!</p>
+      </div>
+
+   </div>
+
+   <script src="pathfinder.js"></script>
+   <script src="script.js"></script>
+</body>
+
+</html>

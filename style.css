@@ -1,0 +1,78 @@
+* {
+   margin: 0;
+   padding: 0;
+}
+
+.container {
+   text-align: center;
+}
+
+button {
+   margin: 5px;
+   padding: 5px 10px;
+}
+
+#board {
+   /* width: 500px; */
+   /* height: 500px; */
+   /* border: 1px solid #ccc; */
+   display: inline-block;
+   margin-top: 5px;
+}
+.row {
+   height: 11px;
+}
+
+.cell {
+   border: .5px solid #ccc;
+   /* outline: 1px solid #ccc; */
+   width: 10px;
+   height: 10px;
+   display: inline-block;
+   position: relative;
+}
+
+.cell.path {
+   background-color: #9de787;
+}
+
+.cell.alive {
+   background-color: #333;
+}
+
+.cell.start {
+   background-color: rgb(255, 187, 0);
+}
+
+.cell.goal {
+   background-color: rgb(255, 0, 0);
+}
+
+.cell.player::after {
+   content: "";
+   position: absolute;
+   left: 1px;
+   top: 1px;
+   width: 8px;
+   height: 8px;
+   border-radius: 50%;
+   background-color: blue;
+}
+
+.cell.player.loser::after {
+   background-color: red;
+}
+
+#status-text {
+   margin-top: 5px;
+   font: sans-serif 12pt;
+   font-weight: bold;
+}
+
+.status-winner {
+   color: green;
+}
+
+.status-loser {
+   color: red;
+}
