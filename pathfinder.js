@@ -76,6 +76,20 @@ class PathFinder
 
    static calculateCost(p1, p2, direction)
    {
+      const start = [0, 0];
+      let deltaRow = Math.abs(p1[0] - p2[0]);
+      let deltaCol = Math.abs(p1[1] - p2[1]);
+
+      // // Cross line tie breaker
+      // let dx1 = Math.abs(p1[0] - p2[0] + 6);
+      // let dy1 = Math.abs(p1[1] - p2[1] - 6);
+      // let dx2 = Math.abs(start[0] - p2[0]);
+      // let dy2 = Math.abs(start[1] - p2[1]);
+      // let cross = Math.abs(dx1 * dy2 - dx2 * dy1)
+
+      // console.log('p1[0]', p1[0], 'p1[1]', p1[1], 'p2[0]', p2[0], 'p2[1]', p2[1], 'cross', cross);
+
+      // return (deltaRow + deltaCol) + (cross * 0.001);
 
       let weights = {
          'U': 1,
@@ -84,16 +98,13 @@ class PathFinder
          'R': 0.9,
       };
 
-      let deltaRow = Math.abs(p1[0] - p2[0]);
-      let deltaCol = Math.abs(p1[1] - p2[1]);
-
       // buffer for diagonal movement
-      if(deltaRow > deltaCol)
+      if (deltaRow > deltaCol)
       {
          weights['C'] = 0.8;
       }
 
-      if(deltaCol > deltaRow)
+      if (deltaCol > deltaRow)
       {
          weights['R'] = 0.8;
       }
