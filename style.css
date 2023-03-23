@@ -32,6 +32,10 @@ button {
    position: relative;
 }
 
+.cell.attempted {
+   background-color: red;
+}
+
 .cell.path {
    background-color: #9de787;
 }
@@ -44,7 +48,7 @@ button {
    background-color: rgb(255, 187, 0);
 }
 
-.cell.goal {
+ .cell.goal {
    background-color: rgb(255, 0, 0);
 }
 
