@@ -76,18 +76,30 @@ class PathFinder
 
    static calculateCost(p1, p2, direction)
    {
-      // let weights = {
-      //    'U': 30,
-      //    'R': 10,
-      //    'D': 20,
-      //    'L': 40,
-      // };
-      // return weights[direction];
+
+      let weights = {
+         'U': 1,
+         'D': 0.9,
+         'L': 1,
+         'R': 0.9,
+      };
 
       let deltaRow = Math.abs(p1[0] - p2[0]);
       let deltaCol = Math.abs(p1[1] - p2[1]);
 
-      // debugger;
+      // buffer for diagonal movement
+      if(deltaRow > deltaCol)
+      {
+         weights['C'] = 0.8;
+      }
+
+      if(deltaCol > deltaRow)
+      {
+         weights['R'] = 0.8;
+      }
+
+      return weights[direction] * (deltaCol + deltaRow);
+
 
       // plus 25% to force diagonal movement
       if (direction === 'D' && deltaRow > deltaCol)
