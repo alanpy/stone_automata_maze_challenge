@@ -76,9 +76,20 @@ class PathFinder
 
    static calculateCost(p1, p2, direction)
    {
+
+      // const dx = Math.abs(p1[0] - p2[0]);
+      // const dy = Math.abs(p1[1] - p2[1]);
+      // const diagonalSteps = Math.min(dx, dy);
+      // const straightSteps = dx + dy;
+      // const diagonalDistance = Math.sqrt(2) * diagonalSteps;
+      // const straightDistance = straightSteps - (2 * diagonalSteps);
+      // return diagonalDistance + straightDistance;
+
       const start = [0, 0];
       let deltaRow = Math.abs(p1[0] - p2[0]);
       let deltaCol = Math.abs(p1[1] - p2[1]);
+
+
 
       // // Cross line tie breaker
       // let dx1 = Math.abs(p1[0] - p2[0] + 6);
