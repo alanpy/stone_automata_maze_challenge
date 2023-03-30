@@ -37,11 +37,11 @@ button {
 }
 
 .cell.path {
-   background-color: #9de787;
+   background-color: rgb(248, 211, 108);
 }
 
 .cell.alive {
-   background-color: #333;
+   background-color: green;
 }
 
 .cell.start {
@@ -49,7 +49,7 @@ button {
 }
 
  .cell.goal {
-   background-color: rgb(255, 0, 0);
+   background-color: rgb(255, 187, 0);
 }
 
 .cell.player::after {

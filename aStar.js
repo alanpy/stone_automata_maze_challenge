@@ -1,14 +1,37 @@
-function aStar(start, end, getGridState)
+// opted to use a variation of the A* algorithm to solve the problem
+function aStar(start, end, initialGrid, getNextGridCallback)
 {
+   // keep track of grids we've already seen
+   const historicalGrids = [initialGrid];
+
+   function getGridState(depth)
+   {
+      if (historicalGrids.length <= depth)
+      {
+         let nextGrid = getNextGridCallback(historicalGrids[depth - 1]);
+         historicalGrids.push(nextGrid);
+      }
+
+      return historicalGrids[depth];
+   }
+
    // Define the node class
    class Node
    {
       constructor(state, parent, gScore)
       {
+         // array with 3 elements: [row, col, depth]
+         // depth is the number of grids we've traversed
+         // this is used to allow going back in time (to previous grids) and get a better path
          this.state = state;
+
          this.parent = parent;
          this.gScore = gScore;
-         this.fScore = this.gScore + (heuristic(this) * 5);
+
+         // add wheigths to the heuristic to make the algorithm more efficient
+         // a higher weight will make to explore less nodes, but if the weight is too high
+         // the algorithm will not find the optimal path
+         this.fScore = this.gScore + (heuristic(this) * 3);
       }
    }
 
@@ -21,15 +44,12 @@ function aStar(start, end, getGridState)
       // Manhattan distance
       // return Math.abs(row - endRow) + Math.abs(col - endCol);
 
-      // Euclidean distance
-      // return Math.sqrt((row - endRow) ^ 2 + (col - endCol) ^ 2);
-
-      // Cross line tie breaker
+      // Cross line tie breaker to optimize the number of turns and get a more straight line (natural path)
       let dx1 = Math.abs(row - endRow);
       let dy1 = Math.abs(col - endCol);
       let dx2 = Math.abs(startRow - endRow);
       let dy2 = Math.abs(startCol - endCol);
-      let cross = Math.abs(dx1 * dy2 - dx2 * dy1)
+      let cross = Math.abs(dx1 * dy2 - dx2 * dy1);
       return (dx1 + dy1) + (cross * 0.001);
    }
 
@@ -77,7 +97,6 @@ function aStar(start, end, getGridState)
    }
 
    let count = 0;
-   let nodeCount = 0;
 
    // Initialize the open and closed sets
    let openSet = [new Node([...start, 0], null, 0)];
@@ -86,10 +105,9 @@ function aStar(start, end, getGridState)
    // Search for the path
    while (openSet.length > 0)
    {
-      // debugger;
       count++;
 
-      // Get the current node
+      // Get the current node (you can use binary heap here to fasten the search)
       let current = openSet.reduce((a, b) => (a.fScore < b.fScore) ? a : b);
 
       // Check if we've reached the target node
@@ -101,55 +119,16 @@ function aStar(start, end, getGridState)
             path.push(current.state);
             current = current.parent;
          }
-         console.log('count', count, 'nodeCount', nodeCount);
+         console.log('Iteraction count: ', count);
          return path.reverse();
       }
 
-      // print current path
-      if (true)
-      {
-
-      }
-
       // prevent long running searches
-      if (count > 100000)
+      if (count > 50000)
       {
-         console.log('count > 100.000', 'current', current);
-
-         let game_path = [];
-         let temp = current;
-         while (temp !== null)
-         {
-            let row = temp.state[0];
-            let col = temp.state[1];
-
-            game_path.push('x:' + row + '_y:' + col);
-            temp = temp.parent;
-         }
-         game.path = game_path.reverse();
-
-         // print closed set
-         game.attemptedMoves = [];
-         for (let node of closedSet)
-         {
-            let row = node.state[0];
-            let col = node.state[1];
-            game.attemptedMoves.push('x:' + row + '_y:' + col);
-         }
-
-         // for (let node of openSet)
-         // {
-         //    let row = node.state[0];
-         //    let col = node.state[1];
-         //    game.attemptedMoves.push('x:' + row + '_y:' + col);
-         // }
-
-         game.render();
-
-         break;
+         console.error("Reached max allowed iterations");
+         return null;
       }
-
-      // console.log('count', count, 'current', current.state);
 
       // Get the next grid state
       let gridState = getGridState(current.state[2] + 1);
@@ -174,48 +153,16 @@ function aStar(start, end, getGridState)
          if (openNode === undefined)
          {
             openSet.push(new Node(neighbor, current, tentativeGScore));
-            nodeCount++;
          } else if (tentativeGScore < openNode.gScore)
          {
             openNode.gScore = tentativeGScore;
             openNode.parent = current;
-            nodeCount++;
          }
       }
 
       // Move the current node to the closed set
       openSet = openSet.filter(node => !compareArrays(node.state, current.state));
       closedSet.push(current);
-
-      // debugger;
-
-      // let _data = game.data;
-      // game.data = gridState;
-
-      // let game_path = [];
-      // let temp = current;
-      // while (temp !== null)
-      // {
-      //    let row = temp.state[0];
-      //    let col = temp.state[1];
-
-      //    game_path.push('x:' + row + '_y:' + col);
-      //    temp = temp.parent;
-      // }
-      // game.path = game_path.reverse();
-      // game.player = [current.state[0], current.state[1]];
-
-      // // // print closed set
-      // // game.attemptedMoves = [];
-      // // for (let node of closedSet)
-      // // {
-      // //    let row = node.state[0];
-      // //    let col = node.state[1];
-      // //    game.attemptedMoves.push('x:' + row + '_y:' + col);
-      // // }
-
-      // game.render();
-      // game.data = _data;
    }
 
    // No path was found
